@@ -3,3 +3,5 @@ We were assigned a task to create a webpage using one or more API. And this is t
 
 # Test
 test
+
+![Screenshot](pexels-jakub-novacek-924824.jpg)
