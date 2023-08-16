@@ -29,6 +29,12 @@ function fetchPokemonData(pokemon){
         const pokeType2 = pokeData.types[1] ? pokeData.types[1].type.name : null;
         const pokeImage = pokeData.sprites.other["official-artwork"].front_default;
         
+        /* Syntax used to capitalize the first letter in the pokemon name and the types. */
+        const capitalizedPokeName = pokeName.charAt(0).toUpperCase() + pokeName.slice(1);
+        const capitalizedPokeType1 = pokeType1.charAt(0).toUpperCase() + pokeType1.slice(1);
+        const capitalizedPokeType2 = pokeType2.charAt(0).toUpperCase() + pokeType2.slice(1);
+        
+
         const pokemonCard = document.createElement("div");
         pokemonCard.id = "pokemon-card";
         cardContainer.appendChild(pokemonCard);
@@ -50,7 +56,7 @@ function fetchPokemonData(pokemon){
     
         const pokemonName = document.createElement("h1")
         pokemonName.id = "pokemon-name";
-        pokemonName.textContent = pokeName;
+        pokemonName.textContent = capitalizedPokeName;
         cardInfo.appendChild(pokemonName);
     
         const pokemonTypeTitle = document.createElement("h3");
@@ -64,13 +70,13 @@ function fetchPokemonData(pokemon){
     
         const pokemonType1 = document.createElement("p");
         pokemonType1.id = "pokemon-type-1";
-        pokemonType1.textContent = pokeType1;
+        pokemonType1.textContent = capitalizedPokeType1;
         pokemonType.appendChild(pokemonType1);
     
         if (pokeType2) {
             const pokemonType2 = document.createElement("p");
             pokemonType2.id = "pokemon-type-1";
-            pokemonType2.textContent = pokeType2;
+            pokemonType2.textContent = capitalizedPokeType2;
             pokemonType.appendChild(pokemonType2);
         }
     })
