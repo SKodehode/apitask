@@ -9,12 +9,17 @@
         <script src="./js/index.js" defer></script>
     </head>
     <body>
-        <nav>
+        <nav id="nav">
             <input type="text" id="search" name="search" placeholder="Search..." minlength="1" maxlength="20" size="20" />
             <div class="nav-logo"></div>
         </nav>
         <div id="app">
             <h1>Pokémon Cards</h1>
+            <div id="sortby">
+                <button id="btn-sortbyname"></button>
+                <button id="btn-sortbytype"></button>
+                <button id="btn-sortbynumber"></button>
+            </div>
             <div id="card-container">
                 <div class="card">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="">
