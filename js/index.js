@@ -36,6 +36,7 @@ function fetchPokemonData(pokemon){
         const pokemonImage = document.createElement("img");
         pokemonImage.id = "pokemonImage";
         pokemonImage.src = pokeImage;
+        pokeImage.loading = "lazy";
         pokemonCard.appendChild(pokemonImage);
     
         const pokemonNumber = document.createElement("p");
