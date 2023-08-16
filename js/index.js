@@ -1,3 +1,9 @@
+const searchBar = document.getElementById("search")
+const sortByName = document.getElementById("btn-sortbyname")
+const sortByType = document.getElementById("btn-sortbytype")
+const sortByNumber = document.getElementById("btn-sortbyNumber")
+const cardContainer = document.getElementsById("card-container")
+
 /* fetch("http://shibe.online/api/shibes?count=100&urls=true&httpsUrls=true")
 .then(response => response.json())
 .then(data => console.log(data)) */
