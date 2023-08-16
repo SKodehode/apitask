@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Website</title>
-    <link rel="shortcut icon" href="#" type="image/x-icon">
-    <link rel="stylesheet" href="./css/index.css">
-    <script src="./js/index.js" defer></script>
-</head>
-<body>
-    <h1>Test</h1>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>API Website</title>
+        <link rel="shortcut icon" href="#" type="image/x-icon">
+        <link rel="stylesheet" href="./css/index.css">
+        <script src="./js/index.js" defer></script>
+    </head>
+    <body>
+        <nav>
+            <input type="text" id="search" name="search" placeholder="Search..." minlength="1" maxlength="20" size="20" />
+            <div class="nav-logo"></div>
+        </nav>
+        <div id="app">
+            <h1>Pokémon Cards</h1>
+            <div id="card-container">
+                <div class="card">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="">
+                    <div class="card-info">
+                        <h2>Name placeholder</h2>
+                        <div class="card-type">
+                            <h3 class="type-1">Grass</h3>
+                            <h3 class="type-2">Poison</h3>
+                        </div>
+                    </div>
+                    <div class="card-id">
+                        <h4>#1</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
