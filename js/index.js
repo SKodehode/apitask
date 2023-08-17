@@ -12,6 +12,7 @@ function catchPokemon() {
         .then(function(allpokemon){
             allpokemon.results.forEach(function(pokemon){
                 fetchPokemonData(pokemon);
+                console.log(pokemon)
             })
         })
 }
@@ -26,15 +27,16 @@ function fetchPokemonData(pokemon){
         const pokeName = pokeData.name;
         const pokeNumber = pokeData.id;
         const pokeType1 = pokeData.types[0].type.name;
+        /* Added a if statement to the second type property as not every pokemon has a second type. */
         const pokeType2 = pokeData.types[1] ? pokeData.types[1].type.name : null;
         const pokeImage = pokeData.sprites.other["official-artwork"].front_default;
         
         /* Syntax used to capitalize the first letter in the pokemon name and the types. */
         const capitalizedPokeName = pokeName.charAt(0).toUpperCase() + pokeName.slice(1);
         const capitalizedPokeType1 = pokeType1.charAt(0).toUpperCase() + pokeType1.slice(1);
-        const capitalizedPokeType2 = pokeType2.charAt(0).toUpperCase() + pokeType2.slice(1);
-        
+        const capitalizedPokeType2 = pokeType2 ? pokeType2.charAt(0).toUpperCase() + pokeType2.slice(1) : null;    
 
+        
         const pokemonCard = document.createElement("div");
         pokemonCard.id = "pokemon-card";
         cardContainer.appendChild(pokemonCard);
@@ -78,6 +80,8 @@ function fetchPokemonData(pokemon){
             pokemonType2.id = "pokemon-type-1";
             pokemonType2.textContent = capitalizedPokeType2;
             pokemonType.appendChild(pokemonType2);
+            /* console.log(pokeData) */
         }
     })
 };
+
