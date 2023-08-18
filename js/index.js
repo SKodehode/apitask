@@ -34,8 +34,6 @@ async function fetchPokemonData(pokemon) {
         .then(response => response.json());
 }
 
-/* console.log(fetchPokemonData) */
-
 function createPokemonCard(pokeData) {
     const pokeName = pokeData.name;
     const pokeNumber = pokeData.id;
