@@ -3,9 +3,10 @@ const searchBar = document.getElementById("search");
 const btnContainer = document.getElementById("btncontainer")
 const sortByName = document.getElementById("btn-sortbyname");
 const sortByType = document.getElementById("btn-sortbytype");
-const sortByNumber = document.getElementById("btn-sortbyNumber");
+const sortByNumber = document.getElementById("btn-sortbynumber");
 const cardContainer = document.getElementById("card-container");
-const typeButtons = {};
+let typeButtons = {};
+let pokemonDataArray = [];
 
 /* A funtion that uses a fetch funtion to fetch information from the provided link, in this case the pokemon api. */
 /* The goal is to fetch the first 151 pokemons and have them in an object array. And from there we will extract their information. */
@@ -16,22 +17,26 @@ function catchPokemon() {
         .then(response => response.json())
         .then(function(allpokemon){
             const pokemonPromises = allpokemon.results.map(fetchPokemonData);
-            Promise.all(pokemonPromises).then(pokemonDataArray => {
+            Promise.all(pokemonPromises).then(dataArray => {
+                pokemonDataArray = dataArray;
                 pokemonDataArray.sort((a, b) => a.id - b.id);
-                cardContainer.textContent = "";
-                pokemonDataArray.forEach(pokeData => {
-                    createPokemonCard(pokeData);
-                });
+                createPokemonCards();
             });
-        });
+        }); 
 };
 
 catchPokemon();
-
-async function fetchPokemonData(pokemon) {
+    async function fetchPokemonData(pokemon) {
     const url = pokemon.url;
     return fetch(url)
         .then(response => response.json());
+}
+
+function createPokemonCards() {
+    cardContainer.textContent = "";
+    pokemonDataArray.forEach(pokeData => {
+        createPokemonCard(pokeData);
+    });
 }
 
 function createPokemonCard(pokeData) {
@@ -110,28 +115,33 @@ function createPokemonCard(pokeData) {
             statElement.textContent = statInfo;
             statParagraph.appendChild(statElement);
         }
-
-    /* This code was implimented with the help of ChatGPT for the sake of having a element type button sorting funtion. */
-    /* With my current knowledge I would not be able to create this so I will not take any credit for it. */
-    if (!typeButtons[pokeType1]) {
-        const button = document.createElement("button");
-        button.className = "btn";
-        button.textContent = capitalizedPokeType1;
-        button.addEventListener('click', () => {
-            filterSelection(pokeType1);
-        });
-        typeButtons[pokeType1] = button;
-        btnContainer.appendChild(button);
-    }
-
-    if (pokeType2 && !typeButtons[pokeType2]) {
-        const button = document.createElement("button");
-        button.className = "btn";
-        button.textContent = capitalizedPokeType2;
-        button.addEventListener('click', () => {
-            filterSelection(pokeType2);
-        });
-        typeButtons[pokeType2] = button;
-        btnContainer.appendChild(button);
-    }
+        
+ console.log(pokeData)
 }
+
+let currentSortOrder = "ascending"
+const sortOrder = () => currentSortOrder = currentSortOrder === "ascending" ? "descending" : "ascending";
+
+    function sortPokemon(sortBy, array = pokemonDataArray) {
+        sortOrder();
+        const isOrderAscending = currentSortOrder === "ascending" ? 1 : -1;
+        array.sort((a, b) => {
+            if (a[sortBy] > b[sortBy]) return 1 * isOrderAscending;
+            else if (a[sortBy] < b[sortBy]) return -1 * isOrderAscending;
+            return 0;
+        });
+    };
+
+    sortByNumber.addEventListener("click", (event) => {
+        event.preventDefault();
+        sortPokemon("id");
+        createPokemonCards();
+        console.log("test")
+    });
+
+    sortByName.addEventListener("click", (event) => {
+        event.preventDefault();
+        sortPokemon("name");
+        createPokemonCards();
+        console.log("test")
+    });
