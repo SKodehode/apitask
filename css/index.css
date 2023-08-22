@@ -33,7 +33,7 @@ main {
     gap: 2rem;
 }
 
-#pokemon-card {
+.pokemon-card {
     border: 10px solid orange;
     border-radius: 1.5rem;
     width: 350px;
@@ -42,24 +42,24 @@ main {
     text-align: center;
 }
 
-#pokemon-number {
+.pokemon-number {
     position: absolute;
     top: 0rem;
     left: 1rem;
     font-weight: bold;
 }
 
-#pokemonImage {
+.pokemonImage {
     width: 300px;
     height: 300px;
 }
 
-#pokemon-types {
+.pokemon-types {
  display: flex;   
  justify-content: space-evenly;
 }
 
-#stat-info {
+.stat-info {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 1rem;
@@ -68,6 +68,6 @@ main {
     justify-content: space-evenly;
 }
 
-#stat-element {
+.stat-element {
     padding: 1rem;
 }

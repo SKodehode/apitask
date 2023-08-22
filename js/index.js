@@ -8,25 +8,28 @@ const cardContainer = document.getElementById("card-container");
 let typeButtons = {};
 let pokemonDataArray = [];
 
-/* A funtion that uses a fetch funtion to fetch information from the provided link, in this case the pokemon api. */
-/* The goal is to fetch the first 151 pokemons and have them in an object array. And from there we will extract their information. */
-/* Using .then methods the function creates a promise to respond asyncronously once it's promise has been fullfiled. */
-/* It will then return the  */
-function catchPokemon() {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0")
-        .then(response => response.json())
-        .then(function(allpokemon){
-            const pokemonPromises = allpokemon.results.map(fetchPokemonData);
-            Promise.all(pokemonPromises).then(dataArray => {
-                pokemonDataArray = dataArray;
-                pokemonDataArray.sort((a, b) => a.id - b.id);
-                createPokemonCards();
-            });
-        }); 
-};
+async function catchPokemon() {
+    try {
+        const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0");
+        const allpokemon = await response.json();
+        const pokemonPromises = allpokemon.results.map(fetchPokemonData);
+        const dataArray = await Promise.all(pokemonPromises);
+        pokemonDataArray = dataArray;
+        pokemonDataArray.sort((a, b) => a.id - b.id);
+        createPokemonCards();
+
+        const typesArray = pokemonDataArray.flatMap(pokemon => pokemon.types.map(type => type.type.name));
+        const uniqueTypes = [...new Set(typesArray)];
+        makeButtons(uniqueTypes);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
 
 catchPokemon();
-    async function fetchPokemonData(pokemon) {
+
+
+async function fetchPokemonData(pokemon) {
     const url = pokemon.url;
     return fetch(url)
         .then(response => response.json());
@@ -46,63 +49,57 @@ function createPokemonCard(pokeData) {
     const pokeType2 = pokeData.types[1] ? pokeData.types[1].type.name : null;
     const pokeImage = pokeData.sprites.other["official-artwork"].front_default;
     
-    /* Syntax used to capitalize the first letter in the pokemon name and the types. */
     const capitalizedPokeName = pokeName.charAt(0).toUpperCase() + pokeName.slice(1);
     const capitalizedPokeType1 = pokeType1.charAt(0).toUpperCase() + pokeType1.slice(1);
-    const capitalizedPokeType2 = pokeType2 ? pokeType2.charAt(0).toUpperCase() + pokeType2.slice(1) : null;    
+    const capitalizedPokeType2 = pokeType2 ? pokeType2.charAt(0).toUpperCase() + pokeType2.slice(1) : null;
     
-    /* These blocks of code all use createElement to create various HTML elements to dynamically create cards for each pokemon. */
-    /* These cards are created and filled with the information gathered from the API and placed into their own HTML elements. */
-    /* starting off it generates a div to wrap all the pokemon's information. */
-    /* The information is separated into various CSS elements and each element is given*/
     const pokemonCard = document.createElement("div");
-    pokemonCard.id = "pokemon-card";
+    pokemonCard.className = "pokemon-card";
     cardContainer.appendChild(pokemonCard);
     
-    /* Here we give the card an image  */
     const pokemonImage = document.createElement("img");
-    pokemonImage.id = "pokemonImage";
+    pokemonImage.className = "pokemonImage";
     pokemonImage.src = pokeImage;
     pokeImage.loading = "lazy";
     pokemonCard.appendChild(pokemonImage);
 
     const pokemonNumber = document.createElement("p");
-    pokemonNumber.id = "pokemon-number";
+    pokemonNumber.className = "pokemon-number";
     pokemonNumber.textContent = "#" + pokeNumber;
     pokemonCard.appendChild(pokemonNumber);
 
     const cardInfo = document.createElement("div");
-    cardInfo.id = "card-info";
+    cardInfo.className = "card-info";
     pokemonCard.appendChild(cardInfo);
 
     const pokemonName = document.createElement("h1")
-    pokemonName.id = "pokemon-name";
+    pokemonName.className = "pokemon-name";
     pokemonName.textContent = capitalizedPokeName;
     cardInfo.appendChild(pokemonName);
 
     const pokemonTypeTitle = document.createElement("h3");
-    pokemonTypeTitle.id = "type-title";
+    pokemonTypeTitle.className = "type-title";
     pokemonTypeTitle.textContent = "Types:"
     cardInfo.appendChild(pokemonTypeTitle)
 
     const pokemonType = document.createElement("div");
-    pokemonType.id = "pokemon-types";
+    pokemonType.className = "pokemon-types";
     cardInfo.appendChild(pokemonType);
 
     const pokemonType1 = document.createElement("p");
-    pokemonType1.id = "pokemon-type";
+    pokemonType1.className = "pokemon-type";
     pokemonType1.textContent = capitalizedPokeType1;
     pokemonType.appendChild(pokemonType1);
 
     if (pokeType2) {
         const pokemonType2 = document.createElement("p");
-        pokemonType2.id = "pokemon-type";
+        pokemonType2.className = "pokemon-type";
         pokemonType2.textContent = capitalizedPokeType2;
         pokemonType.appendChild(pokemonType2);
     }
      
     const statParagraph = document.createElement("ul");
-    statParagraph.id = "stat-info"
+    statParagraph.className = "stat-info"
     cardInfo.appendChild(statParagraph);
         for (let i = 0; i < pokeData.stats.length; i++) {
             const stat = pokeData.stats[i];
@@ -111,12 +108,13 @@ function createPokemonCard(pokeData) {
     
             const statInfo = `${statName}: ${statValue}`;
             const statElement = document.createElement("li");
-            statElement.id = "stat-element"
+            statElement.className = "stat-element"
             statElement.textContent = statInfo;
             statParagraph.appendChild(statElement);
         }
         
- console.log(pokeData)
+    pokemonCard.dataset.type1 = pokeType1;
+    pokemonCard.dataset.type2 = pokeType2 || "";
 }
 
 let currentSortOrder = "ascending"
@@ -132,16 +130,42 @@ const sortOrder = () => currentSortOrder = currentSortOrder === "ascending" ? "d
         });
     };
 
+    function makeButtons(types) {
+        for (let i = 0; i < types.length; i++) {
+            const button = document.createElement("button");
+            button.textContent = types[i].charAt(0).toUpperCase() + types[i].slice(1);
+            button.value = types[i];
+            btnContainer.appendChild(button);
+            button.addEventListener("click", () => {
+                toggleTypeFilter(types[i]);
+            });
+        }
+    }
+
+    function toggleTypeFilter(selectedType) {
+        const allPokemonCards = document.querySelectorAll(".pokemon-card");
+        allPokemonCards.forEach(card => {
+            const type1 = card.dataset.type1;
+            const type2 = card.dataset.type2;
+            
+            if (type1 === selectedType || type2 === selectedType) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+
     sortByNumber.addEventListener("click", (event) => {
         event.preventDefault();
         sortPokemon("id");
         createPokemonCards();
-        console.log("test")
     });
 
     sortByName.addEventListener("click", (event) => {
         event.preventDefault();
         sortPokemon("name");
         createPokemonCards();
-        console.log("test")
     });
+
+console.log(pokemonDataArray)
