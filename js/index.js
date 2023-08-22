@@ -77,11 +77,6 @@ function createPokemonCard(pokeData) {
     pokemonName.textContent = capitalizedPokeName;
     cardInfo.appendChild(pokemonName);
 
-    const pokemonTypeTitle = document.createElement("h3");
-    pokemonTypeTitle.className = "type-title";
-    pokemonTypeTitle.textContent = "Types:"
-    cardInfo.appendChild(pokemonTypeTitle)
-
     const pokemonType = document.createElement("div");
     pokemonType.className = "pokemon-types";
     cardInfo.appendChild(pokemonType);
@@ -98,9 +93,9 @@ function createPokemonCard(pokeData) {
         pokemonType.appendChild(pokemonType2);
     }
      
-    const statParagraph = document.createElement("ul");
-    statParagraph.className = "stat-info"
-    cardInfo.appendChild(statParagraph);
+    const statSheet = document.createElement("ul");
+    statSheet.className = "stat-info"
+    cardInfo.appendChild(statSheet);
         for (let i = 0; i < pokeData.stats.length; i++) {
             const stat = pokeData.stats[i];
             const statName = stat.stat.name;
@@ -110,62 +105,64 @@ function createPokemonCard(pokeData) {
             const statElement = document.createElement("li");
             statElement.className = "stat-element"
             statElement.textContent = statInfo;
-            statParagraph.appendChild(statElement);
+            statSheet.appendChild(statElement);
         }
         
     pokemonCard.dataset.type1 = pokeType1;
     pokemonCard.dataset.type2 = pokeType2 || "";
 }
 
+function makeButtons(types) {
+    for (let i = 0; i < types.length; i++) {
+        const button = document.createElement("button");
+        button.className = "btn";
+        button.id = "type-btns"
+        button.textContent = types[i].charAt(0).toUpperCase() + types[i].slice(1);
+        button.value = types[i];
+        btnContainer.appendChild(button);
+        button.addEventListener("click", () => {
+            toggleTypeFilter(types[i]);
+        });
+    }
+}
+
+function toggleTypeFilter(selectedType) {
+    const allPokemonCards = document.querySelectorAll(".pokemon-card");
+    allPokemonCards.forEach(card => {
+        const type1 = card.dataset.type1;
+        const type2 = card.dataset.type2;
+        
+        if (type1 === selectedType || type2 === selectedType) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
 let currentSortOrder = "ascending"
 const sortOrder = () => currentSortOrder = currentSortOrder === "ascending" ? "descending" : "ascending";
 
-    function sortPokemon(sortBy, array = pokemonDataArray) {
-        sortOrder();
-        const isOrderAscending = currentSortOrder === "ascending" ? 1 : -1;
-        array.sort((a, b) => {
-            if (a[sortBy] > b[sortBy]) return 1 * isOrderAscending;
-            else if (a[sortBy] < b[sortBy]) return -1 * isOrderAscending;
-            return 0;
-        });
-    };
-
-    function makeButtons(types) {
-        for (let i = 0; i < types.length; i++) {
-            const button = document.createElement("button");
-            button.textContent = types[i].charAt(0).toUpperCase() + types[i].slice(1);
-            button.value = types[i];
-            btnContainer.appendChild(button);
-            button.addEventListener("click", () => {
-                toggleTypeFilter(types[i]);
-            });
-        }
-    }
-
-    function toggleTypeFilter(selectedType) {
-        const allPokemonCards = document.querySelectorAll(".pokemon-card");
-        allPokemonCards.forEach(card => {
-            const type1 = card.dataset.type1;
-            const type2 = card.dataset.type2;
-            
-            if (type1 === selectedType || type2 === selectedType) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        });
-    }
-
-    sortByNumber.addEventListener("click", (event) => {
-        event.preventDefault();
-        sortPokemon("id");
-        createPokemonCards();
+function sortPokemon(sortBy, array = pokemonDataArray) {
+    sortOrder();
+    const isOrderAscending = currentSortOrder === "ascending" ? 1 : -1;
+    array.sort((a, b) => {
+        if (a[sortBy] > b[sortBy]) return 1 * isOrderAscending;
+        else if (a[sortBy] < b[sortBy]) return -1 * isOrderAscending;
+        return 0;
     });
+};
 
-    sortByName.addEventListener("click", (event) => {
-        event.preventDefault();
-        sortPokemon("name");
-        createPokemonCards();
-    });
+sortByNumber.addEventListener("click", (event) => {
+    event.preventDefault();
+    sortPokemon("id");
+    createPokemonCards();
+});
+
+sortByName.addEventListener("click", (event) => {
+    event.preventDefault();
+    sortPokemon("name");
+    createPokemonCards();
+});
 
 console.log(pokemonDataArray)
