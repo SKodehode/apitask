@@ -1,11 +1,11 @@
 /* DOM element selectors */
 const searchBar = document.getElementById("search");
+const searchBtn = document.getElementById("search-btn");
+const clearIcon = document.getElementById("clear-icon");
 const btnContainer = document.getElementById("btncontainer")
 const sortByName = document.getElementById("btn-sortbyname");
-const toggleType = document.getElementById("typebtn");
 const sortByNumber = document.getElementById("btn-sortbynumber");
 const cardContainer = document.getElementById("card-container");
-let typeButtons = {};
 let pokemonDataArray = [];
 
 async function catchPokemon() {
@@ -115,8 +115,7 @@ function createPokemonCard(pokeData) {
 function makeButtons(types) {
     for (let i = 0; i < types.length; i++) {
         const button = document.createElement("button");
-        button.className = "btn";
-        button.id = "type-btns"
+        button.className = "btn type-btn";
         button.textContent = types[i].charAt(0).toUpperCase() + types[i].slice(1);
         button.value = types[i];
         btnContainer.appendChild(button);
@@ -165,4 +164,40 @@ sortByName.addEventListener("click", (event) => {
     createPokemonCards();
 });
 
-console.log(pokemonDataArray)
+function searchPokemon() {
+    const input = searchBar;
+    const filter = input.value.toLowerCase();
+    const cardName = document.getElementsByClassName("pokemon-card");
+
+    for (let i = 0; i < cardName.length; i++) {
+        const card = cardName[i];
+        const nameElement = card.querySelector(".pokemon-name");
+        const name = nameElement.textContent.toLowerCase();
+
+        if (name.includes(filter)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    }
+}
+
+searchBar.addEventListener("input", () => {
+    searchPokemon();
+    createPokemonCard();
+});
+
+searchBar.addEventListener("keyup", function() {
+    if (this.value.length > 0) {
+        clearIcon.style.display = "block";
+    } else {
+        clearIcon.style.display = "none";
+    }
+});
+
+clearIcon.addEventListener("click" , () => {
+    searchBar.value = ""
+    clearIcon.style.display = "none";
+    searchPokemon();
+    createPokemonCard();
+})

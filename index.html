@@ -10,17 +10,21 @@
     </head>
     <body>
         <header>
-            <input type="text" id="search" name="search" placeholder="Search..." minlength="1" maxlength="20" size="20" />
-            <img src="" alt="">
+            <img id="hero-logo" src="./assets/images/pokemon_logo.png" alt="Image of the pokemon logo.">
+            <div id="search-wrapper">
+                <input type="text" id="search" name="search" placeholder="Search..." minlength="1" maxlength="20" size="20"/>
+                <span id="clear-icon">&times;</span>
+            </div>
         </header>
         <main>
-            <h1>Pokémon Cards</h1>
-            <div id="btncontainer"></div>
             <div id="sortby">
-                <button class="btn" id="btn-sortbyname" type="button">Sort by name</button>
-                <button class="btn" id="btn-sortbynumber" type="button">Sort by number</button>
+                <button class="btn sort-btn" id="btn-sortbyname" type="button">Sort by name</button>
+                <button class="btn sort-btn" id="btn-sortbynumber" type="button">Sort by number</button>
             </div>
+            <div id="btncontainer"></div>
             <div id="card-container"></div>
         </main>
     </body>
 </html>
+
+
