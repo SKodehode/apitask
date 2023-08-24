@@ -98,3 +98,8 @@ main {
 .stat-element {
     padding: 0.2rem;
 }
+
+.btn.active {
+    background-color: green; /* Adjust this to your preferred active button style */
+    color: white; /* Adjust this to your preferred active button style */
+}
