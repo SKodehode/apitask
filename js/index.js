@@ -7,6 +7,8 @@ const sortByName = document.getElementById("btn-sortbyname");
 const sortByNumber = document.getElementById("btn-sortbynumber");
 const cardContainer = document.getElementById("card-container");
 let pokemonDataArray = [];
+const statNameMapping = { "special-attack": "SP.ATK", "special-defense": "SP.DEF" };
+const activeFilters = {};
 
 async function catchPokemon() {
     try {
@@ -25,9 +27,7 @@ async function catchPokemon() {
         console.error("Error fetching data:", error);
     }
 }
-
 catchPokemon();
-
 
 async function fetchPokemonData(pokemon) {
     const url = pokemon.url;
@@ -40,6 +40,7 @@ function createPokemonCards() {
     pokemonDataArray.forEach(pokeData => {
         createPokemonCard(pokeData);
     });
+    updateCardDisplay();
 }
 
 function createPokemonCard(pokeData) {
@@ -96,47 +97,21 @@ function createPokemonCard(pokeData) {
     const statSheet = document.createElement("ul");
     statSheet.className = "stat-info"
     cardInfo.appendChild(statSheet);
-        for (let i = 0; i < pokeData.stats.length; i++) {
-            const stat = pokeData.stats[i];
-            const statName = stat.stat.name;
-            const statValue = stat.base_stat;
-    
-            const statInfo = `${statName}: ${statValue}`;
-            const statElement = document.createElement("li");
-            statElement.className = "stat-element"
-            statElement.textContent = statInfo;
-            statSheet.appendChild(statElement);
-        }
+    for (let i = 0; i < pokeData.stats.length; i++) {
+        const stat = pokeData.stats[i];
+        const statName = stat.stat.name;
+        const statValue = stat.base_stat;
+        
+        capitalizedStatName = statNameMapping[statName] || statName.toUpperCase();
+        const statInfo = `${capitalizedStatName}: ${statValue}`;
+        const statElement = document.createElement("li");
+        statElement.className = "stat-element"
+        statElement.textContent = statInfo;
+        statSheet.appendChild(statElement);
+    }
         
     pokemonCard.dataset.type1 = pokeType1;
     pokemonCard.dataset.type2 = pokeType2 || "";
-}
-
-function makeButtons(types) {
-    for (let i = 0; i < types.length; i++) {
-        const button = document.createElement("button");
-        button.className = "btn type-btn";
-        button.textContent = types[i].charAt(0).toUpperCase() + types[i].slice(1);
-        button.value = types[i];
-        btnContainer.appendChild(button);
-        button.addEventListener("click", () => {
-            toggleTypeFilter(types[i]);
-        });
-    }
-}
-
-function toggleTypeFilter(selectedType) {
-    const allPokemonCards = document.querySelectorAll(".pokemon-card");
-    allPokemonCards.forEach(card => {
-        const type1 = card.dataset.type1;
-        const type2 = card.dataset.type2;
-        
-        if (type1 === selectedType || type2 === selectedType) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
 }
 
 let currentSortOrder = "ascending"
@@ -150,19 +125,8 @@ function sortPokemon(sortBy, array = pokemonDataArray) {
         else if (a[sortBy] < b[sortBy]) return -1 * isOrderAscending;
         return 0;
     });
+    createPokemonCards()
 };
-
-sortByNumber.addEventListener("click", (event) => {
-    event.preventDefault();
-    sortPokemon("id");
-    createPokemonCards();
-});
-
-sortByName.addEventListener("click", (event) => {
-    event.preventDefault();
-    sortPokemon("name");
-    createPokemonCards();
-});
 
 function searchPokemon() {
     const input = searchBar;
@@ -182,6 +146,73 @@ function searchPokemon() {
     }
 }
 
+function makeButtons(types) {
+    for (let i = 0; i < types.length; i++) {
+      const button = document.createElement("button");
+      button.className = "btn type-btn";
+      button.textContent = types[i].charAt(0).toUpperCase() + types[i].slice(1);
+      button.value = types[i];
+      btnContainer.appendChild(button);
+  
+      button.addEventListener("click", () => {
+        toggleTypeFilter(types[i]);
+        updateCardDisplay();
+      });
+  
+      activeFilters[types[i]] = false;
+    }
+}
+
+function updateCardDisplay() {
+    const allPokemonCards = document.querySelectorAll(".pokemon-card");
+    allPokemonCards.forEach(card => {
+        const type1 = card.dataset.type1;
+        const type2 = card.dataset.type2;
+    
+        if (!anyFilterActive() || activeFilters[type1] || (type2 && activeFilters[type2])) {
+        card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+    }
+
+function updateButtonStyles() {
+    const typeButtons = document.querySelectorAll(".btn.type-btn");
+  
+    typeButtons.forEach(button => {
+      const typeName = button.value;
+      if (activeFilters[typeName]) {
+        button.classList.add("active-type-btn");
+      } else {
+        button.classList.remove("active-type-btn");
+      }
+    });
+  }
+  
+function toggleTypeFilter(selectedType) {
+    activeFilters[selectedType] = !activeFilters[selectedType];
+    updateCardDisplay();
+    updateButtonStyles();
+}
+  
+function anyFilterActive() {
+    return Object.values(activeFilters).some(value => value);
+}
+
+sortByNumber.addEventListener("click", (event) => {
+    event.preventDefault();
+    sortPokemon("id");
+    createPokemonCard()
+  });
+  
+  sortByName.addEventListener("click", (event) => {
+    event.preventDefault();
+    sortPokemon("name");
+    createPokemonCard()
+  });
+  
+
 searchBar.addEventListener("input", () => {
     searchPokemon();
     createPokemonCard();
@@ -196,7 +227,7 @@ searchBar.addEventListener("keyup", function() {
 });
 
 clearIcon.addEventListener("click" , () => {
-    searchBar.value = ""
+    searchBar.value = "";
     clearIcon.style.display = "none";
     searchPokemon();
     createPokemonCard();
