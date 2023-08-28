@@ -9,20 +9,24 @@
         <script src="./js/index.js" defer></script>
     </head>
     <body>
-        <header>
+        <main>
+            <!-- I used an img tag for the page's logo, using Nintendo's pokemon logo. -->
             <img id="hero-logo" src="./assets/images/pokemon_logo.png" alt="Image of the pokemon logo.">
+            <!-- A div to wrap up the page's search input and cross span. This was for the purpose of using position absolute so that the cross could be placed ontop of the input field. -->
             <div id="search-wrapper">
                 <input type="text" id="search" name="search" placeholder="Search..." minlength="1" maxlength="20" size="20"/>
                 <span id="clear-icon">&times;</span>
             </div>
-        </header>
-        <main>
+            <!-- A div to wrap up the sort by buttons for the purpose of using display flex and place them side by side. -->
+            <!-- These buttons are used to sort the pokemon-cards either in a alphabetical order by their name. Or in a numerical order by their id number.  -->
             <div id="sortby">
                 <button class="btn sort-btn" id="btn-sortbyname" type="button">Sort by name</button>
                 <button class="btn sort-btn" id="btn-sortbynumber" type="button">Sort by number</button>
             </div>
+            <!-- Div container used to wrap up dynamically created buttons which are generated for each unique pokemon-type and for them to append to once generated. -->
             <div id="btncontainer">
             </div>
+            <!-- Div containter used to wrap up dynamically created cards for each pokemon that we fetch from the API. Currently we're fetching 151 different types. -->
             <div id="card-container"></div>
         </main>
     </body>

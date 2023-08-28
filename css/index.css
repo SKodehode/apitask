@@ -1,26 +1,20 @@
+/* Added global values such as box-sizing to keep the margin and padding within a container's total size. Added letter-spacing for better readability. */
 *{
     box-sizing: border-box;
     letter-spacing: 0.01rem;
 }
 
+/* Stylings for the body. Used to set default values each child container will inherit. */
 body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
     color: #080808;
     background-color: #f0f1f3;
-}   
-
-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 70px;
-    width: 100%;
-    padding-bottom: 2rem;
 }
 
+/* The main container wrapping all the elements inside. Here we have determined the container's size to stretch across a users total viewport using min-height. 
+    Positioning the child elements in the center and towards the top. Adding some padding to create space between the object and the window edge. */
 main {
     min-height: 100vh;
     width: 100%;
@@ -31,15 +25,18 @@ main {
     justify-content: start;
 }
 
+/* Stylings for the main logo. */
 #hero-logo {
     max-height: 20rem;
     width: auto;
 }
 
+/* Added a position to the search wrapper so that the span child element has a positional reference point. */
 #search-wrapper {
     position: relative;
 }
 
+/* Stylings for the input field. */
 #search {
     width: 20rem;
     padding: 1rem 1rem;
@@ -49,6 +46,7 @@ main {
     font-size: 1rem;
 }
 
+/* Stylings for the clear icon, also the span element that uses position absolute in order for it to be placed on top of the input field. */
 #clear-icon {
     position: absolute;
     top: 0.8rem;
@@ -58,18 +56,22 @@ main {
     display: none;
 }
 
+/* Stylings for the sort buttons to remove their grey background colors. */
 .sort-btn {
     background-color: transparent;
 }
 
+/* Stylings for the sort buttons when hovered over. Adding a underline to their textcontent. */
 .sort-btn:hover {
     text-decoration: underline;
 }
 
+/* Stylings for the sortby container. Adding margins for spacing. */
 #sortby {
     margin-bottom: 2rem;
 }
 
+/* Stylings for the button container. Using display flex to position the buttons next to one another. And using space-evenly to position them evenly inside the container. In hindsight this might have been a poor selection if there were only a few buttons. */
 #btncontainer {
     display: flex;
     justify-content: space-evenly;
@@ -77,32 +79,36 @@ main {
     position: relative;
 }
 
+/* Stylings for the button class, the stylings here is applied to every button on this page. Removing their borders and their outlines. Adding cursor: pointer to signify that this element can be clicked.  */
 .btn {
     padding: 1rem;
     margin: 0rem 0rem 0rem 0.1rem;
     border: none;
-    border-radius: 50px;
     outline: none;
     cursor: pointer;
     font-size: 1.1rem;
 }
 
+/* Stylings for the type-btn elements, which are the type filter buttons. */
 .type-btn {
     background-color: transparent;
     padding: 1rem 1rem;
 }
 
+/* Hover stylings for the type-btn elements, which gives them a yellow background when hovered over. */
 .type-btn:hover {
     color: #080808;
     background-color: #FFCC00;
 
   }
 
+  /* Stylings for the active-type-btn elements. This is only applied to active filter buttons. This gives the same yellow background as the type-btn hover styling does. */
 .active-type-btn {
     color: #080808;
     background-color: #FFCC00;
   }
 
+/* Stylings for the card container. Display grid has been used to position the cards in a row of four cards at a time. Using gap to create space between them. */
 #card-container {
     padding: 2rem 0rem 0rem 0rem;
     display: grid;
@@ -110,6 +116,8 @@ main {
     gap: 1rem;
 }
 
+/* Stylings for the pokemon cards themselves. Determining the width of the element while the height remains on auto, and will stretch as more content fills it. 
+    Added position relative as a reference point for the pokemon-id child element. */
 .pokemon-card {
     width: 20rem;
     height: auto;
@@ -119,6 +127,7 @@ main {
     border-radius: 2rem;
 }
 
+/* Stylings for the pokemon number that uses position absolute and is positioned in the top left corner of the pokemon card. */
 .pokemon-number {
     position: absolute;
     top: 0rem;
@@ -126,24 +135,30 @@ main {
     font-weight: bold;
 }
 
+    /* Stylings for the official artwork image for every pokemon. Setting their width and height. */
 .pokemonImage {
     width: 12rem;
     height: 12rem;
 }
 
+/* Stylings for the H1 element, changing it's font size. */
 .pokemon-name {
     font-size: 1.2rem;
 }
 
+/* Stylings for the paragraph elements, changing their font sizes. */
 .type-title {
     font-size: 1rem;
 }
 
+/* Stylings for the pokemon-types container, adding display flex to position the two types next to each other. */
 .pokemon-types {
  display: flex;   
  justify-content: space-evenly;
 }
 
+/* Stylings for the stat information. Using display grid we add three rows that will hold two columns each containing a pokemon's stat name and number. 
+    Using space evenly to add equal space between them inside the card container. */
 .stat-info {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -154,6 +169,7 @@ main {
     text-align: start;
 }
 
+/* Stylings for the stat element inside the stat info container. Adding padding to create some space around the element. */
 .stat-element {
     padding: 0.2rem;
 }
