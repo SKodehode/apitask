@@ -21,7 +21,7 @@ const activeFilters = {};
     The Async function is wrapped inside an Asynchronous try key which will test the code while it's using it. In case there are any errors there's a catch key which will display an error message in the console along with the error code. */
 async function catchPokemon() {
     try {
-        const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0");
+        const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10000&offset=0");
         const allpokemon = await response.json();
         /* We have a .map function which calls a different function named fetchPokemonData. */
         const pokemonPromises = allpokemon.results.map(fetchPokemonData);
